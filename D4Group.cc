@@ -31,6 +31,8 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <map>
+#include <string>
 
 #include <stdint.h>
 
@@ -38,6 +40,7 @@
 
 #include "BaseType.h"
 #include "Array.h"
+#include "Grid.h"
 
 #include "XMLWriter.h"
 #include "D4Attributes.h"
@@ -663,17 +666,14 @@ vector<BaseType *> *
 D4Group::transform_to_dap2(AttrTable *parent_attr_table)
 {
     DBG( cerr << __func__ << "() - BEGIN ("<< name() << ")" << endl);
+    bool replicate_shared_dims = true;
 
     vector<BaseType *> *results = new vector<BaseType *>(); // LEAK
 
     // Get the D4Group's attributes
-#if 0
-    AttrTable *group_attrs = attributes()->get_AttrTable(name());
-#else
     AttrTable *group_attrs = new AttrTable();
     attributes()->transform_attrs_to_dap2(group_attrs);
     group_attrs->set_name(name());
-#endif
 
     // If this is the root group then copy all of its attributes into the parent_attr_table.
     // The group_attrs AttrTable* above will be replaced by the parent_attr_table.
@@ -704,6 +704,8 @@ D4Group::transform_to_dap2(AttrTable *parent_attr_table)
         DBG( cerr << __func__ << "() - Processing member variable '" << (*i)->name() <<
             "' root: " << (is_root?"true":"false") << endl);
 
+        map<string,Array*> potential_shared_dims;  // Holds Grid maps, see below. jhrg 10/3/19
+
         vector<BaseType *> *new_vars = (*i)->transform_to_dap2(group_attrs);
         if (new_vars) {  // Might be un-mappable
             // It's not so game on..
@@ -712,11 +714,25 @@ D4Group::transform_to_dap2(AttrTable *parent_attr_table)
                 (*vi)->set_name(new_name);
                 (*vi)->set_parent(NULL);
                 results->push_back((*vi));
-#if 0
-                (*vi) = NULL;
-#endif
+
+                if (replicate_shared_dims && ((*vi)->type() == dods_grid_c)) {
+                    // Add only one copy of each Map with the same name
+                    Grid *g = static_cast<Grid *>(*vi);
+                    for (auto m = g->map_begin(); m != g->map_end(); ++m) {
+                        if (!potential_shared_dims[(*m)->name()])
+                            potential_shared_dims[(*m)->name()] = dynamic_cast<Array*>(*m);
+                    }
+                }
+
                 DBG( cerr << __func__ << "() - Added member variable '" << (*i)->name() << "' " <<
                     "to results vector. root: "<< (is_root?"true":"false") << endl);
+            }
+
+            // replicate all of the 'potential_shared_dims' at the top level of the DDS.
+            // TODO Figure out how to insert these into the top of the vector<> results
+            // TODO in the order they appear in the original Grid.
+            for (auto i = potential_shared_dims.begin(); i != potential_shared_dims.end(); ++i) {
+                results->push_back((*i).second);
             }
 
             delete new_vars;
@@ -745,7 +761,7 @@ D4Group::transform_to_dap2(AttrTable *parent_attr_table)
                 results->push_back(*i);
             }
         }
-	delete d2_vars;
+        delete d2_vars;
     }
 
     if (!is_root) {

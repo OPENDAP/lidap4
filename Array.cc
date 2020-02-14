@@ -284,11 +284,11 @@ bool Array::is_dap2_grid()
 }
 
 /**
- * @brief Transforms this instance of a D4Array into the corresponding DAP2 object.
+ * @brief Transforms this instance of a DAP4 Array into the corresponding DAP2 object.
  *
  * This transformation may return an Array or a Grid object. The DAP2 Grid construct
- * is semantically contained in the DAP4 concept of arrays with Map arrays. If all
- * of the Maps are one dimensional then the D4Array can be represented as a
+ * is semantically contained in the DAP4 concept of an Array with Map arrays. If all
+ * of the Maps are one dimensional then the DAP4 Array can be represented as a
  * Grid object.
  *
  * @param  The AttrTable pointer parent_attr_table is used by Groups, which disappear
@@ -304,6 +304,7 @@ Array::transform_to_dap2(AttrTable *)
     DBG(cerr << __func__ << "() - BEGIN Array '"<< name() << "'" << endl);;
 
     BaseType *dest;
+
     if (!is_dap4()) { // Don't convert a DAP2 thing
         dest = ptr_duplicate();
     }
@@ -335,17 +336,18 @@ Array::transform_to_dap2(AttrTable *)
                     if (d2_result->size() > 1)
                         throw Error(internal_error, "D4Map Array conversion resulted in multiple DAP2 objects.");
 
-                    // TODO - This is probably slow and needs a better pattern. const_cast? static_cast?
                     Array *d2_map_array = dynamic_cast<Array *>((*d2_result)[0]);
                     if (d2_map_array) {
                         if (d2_map_array->dimensions() != 1)
                             throw Error(internal_error, "DAP2 array from D4Map Array conversion has more than 1 dimension.");
 
                         g->add_map(d2_map_array, false);
+#if 0
                         AttrTable at = d2_map_array->get_attr_table();
                         DBG( cerr << __func__ << "() - " <<
                             "DAS For Grid Map '" << d2_map_array->name() << "':" << endl;
                             at.print(cerr); );
+#endif
                     }
                     else {
                         throw Error(internal_error, "Unable to interpret returned DAP2 content.");
