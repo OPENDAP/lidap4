@@ -367,8 +367,9 @@ esc2underscore(string s)
 string
 escattr(string s)
 {
-    const string printable = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()_-+={[}]|\\:;<,>.?/'\"";
+    const string printable = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()_-+={[}]|\\:;<,>.?/'\"\n\t\r";
     const string ESC = "\\";
+#if 0
     const string DOUBLE_ESC = ESC + ESC;
     const string QUOTE = "\"";
     const string ESCQUOTE = ESC + QUOTE;
@@ -391,6 +392,11 @@ escattr(string s)
         s.replace(ind, 1, ESCQUOTE);
         ind += ESCQUOTE.length();
     }
+#endif
+    // escape non-printing characters with octal escape
+    size_t ind = 0;
+    while ((ind = s.find_first_not_of(printable, ind)) != s.npos)
+        s.replace(ind, 1, ESC + octstring(s[ind]));
 
     return s;
 }
