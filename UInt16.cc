@@ -113,7 +113,7 @@ UInt16::operator=(const UInt16 &rhs)
     return *this;
 }
 
-unsigned int
+uint64_t
 UInt16::width(bool) const
 {
     return sizeof(dods_uint16);
@@ -175,7 +175,7 @@ UInt16::deserialize(D4StreamUnMarshaller &um, DMR &)
     um.get_uint16( d_buf ) ;
 }
 
-unsigned int
+uint64_t
 UInt16::val2buf(void *val, bool)
 {
     // Jose Garcia
@@ -191,7 +191,7 @@ UInt16::val2buf(void *val, bool)
     return width();
 }
 
-unsigned int
+uint64_t
 UInt16::buf2val(void **val)
 {
     // Jose Garcia

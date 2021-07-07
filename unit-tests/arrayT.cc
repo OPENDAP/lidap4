@@ -54,7 +54,7 @@ public:
         TestArray ar("My Array", bt);
 
         int l = ar.length();
-        CPPUNIT_ASSERT(l == -1);
+        CPPUNIT_ASSERT(l == 0);
 
         try {
             int w = ar.width(true);
@@ -141,14 +141,14 @@ public:
         CPPUNIT_ASSERT(numdims == 3);
 
         diter = ar.dim_begin();
-        ar.add_constraint(diter, 0, 2, 3);
+        ar.add_constraint(diter, 0, 2, 3, false);
 
         l = ar.length();
         CPPUNIT_ASSERT(l == 12);
 
         diter = ar.dim_begin();
         diter++;
-        ar.add_constraint(diter, 0, 2, 2);
+        ar.add_constraint(diter, 0, 2, 2, false);
 
         l = ar.length();
         CPPUNIT_ASSERT(l == 8);

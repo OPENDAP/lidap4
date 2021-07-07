@@ -73,8 +73,8 @@ public:
     virtual void put_opaque(char *val, unsigned int len);
     virtual void put_int(int val);
 
-    virtual void put_vector(char *val, int num, Vector &vec);
-    virtual void put_vector(char *val, int num, int width, Vector &vec);
+    virtual void put_vector(char *val, uint64_t num, Vector &vec);
+    virtual void put_vector(char *val, uint64_t num, int width, Vector &vec);
 
     virtual void dump(ostream &strm) const;
 };

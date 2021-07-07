@@ -66,8 +66,8 @@ public:
     virtual void put_opaque(char *val, unsigned int len) = 0;
     virtual void put_int(int val) = 0;
 
-    virtual void put_vector(char *val, int num, Vector &vec) = 0;
-    virtual void put_vector(char *val, int num, int width, Vector &vec) = 0;
+    virtual void put_vector(char *val, uint64_t num, Vector &vec) = 0;
+    virtual void put_vector(char *val, uint64_t num, int width, Vector &vec) = 0;
 
     /**
      * Write the prefix bytes for a vector and reset the state/counter for
@@ -76,7 +76,7 @@ public:
      *
      * @param num The number of elements to write
      */
-    virtual void put_vector_start(int /*num*/) {
+    virtual void put_vector_start(uint64_t /*num*/) {
         throw InternalErr(__FILE__, __LINE__, "Not Implemented yet");
     }// = 0;
 
@@ -88,7 +88,7 @@ public:
      * @param width The number of bytes per value
      * @param type The DAP2 data type for each value
      */
-    virtual void put_vector_part(char */*val*/, unsigned int /*num*/, int /*width*/, Type /*type*/) {
+    virtual void put_vector_part(char */*val*/, uint64_t /*num*/, int /*width*/, Type /*type*/) {
         throw InternalErr(__FILE__, __LINE__, "Not Implemented yet");
     }// = 0;
 

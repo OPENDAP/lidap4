@@ -65,7 +65,7 @@ private:
     XDRStreamMarshaller(const XDRStreamMarshaller &m);
     XDRStreamMarshaller &operator=(const XDRStreamMarshaller &);
 
-    void put_vector(char *val, unsigned int num, int width, Type type);
+    void put_vector(char *val, uint64_t num, int width, Type type);
 
     friend class MarshallerTest;
 
@@ -90,11 +90,11 @@ public:
     virtual void put_opaque(char *val, unsigned int len);
     virtual void put_int(int val);
 
-    virtual void put_vector(char *val, int num, Vector &vec);
-    virtual void put_vector(char *val, int num, int width, Vector &vec);
+    virtual void put_vector(char *val, uint64_t num, Vector &vec);
+    virtual void put_vector(char *val, uint64_t num, int width, Vector &vec);
 
-    virtual void put_vector_start(int num);
-    virtual void put_vector_part(char *val, unsigned int num, int width, Type type);
+    virtual void put_vector_start(uint64_t num);
+    virtual void put_vector_part(char *val, uint64_t num, int width, Type type);
     virtual void put_vector_end();
 
     virtual void dump(ostream &strm) const;

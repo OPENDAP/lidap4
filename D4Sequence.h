@@ -144,6 +144,8 @@ private:
     // that. ...purely an optimization.
     bool d_copy_clauses;
 
+
+
 protected:
     // This holds the values of the sequence. Values are stored in
     // instances of BaseTypeRow objects which hold instances of BaseType.
@@ -151,7 +153,8 @@ protected:
     // Allow these values to be accessed by subclasses
     D4SeqValues d_values;
 
-    int64_t d_length;	// How many elements are in the sequence; -1 if not currently known
+    uint64_t d_length;	// How many elements are in the sequence; -1 if not currently known
+    bool d_set_length;  // FALSE if length is unknown.
 
 #if INDEX_SUBSETTING
     int d_starting_row_number;
@@ -190,13 +193,13 @@ public:
      * @return 0 if the number of elements is unknown, else
      * return the number of elements.
      */
-    virtual int length() const { return (int)d_length; }
+    virtual uint64_t length() const { return d_length; }
 
     /**
      * Set the length of the sequence.
      * @param count
      */
-    virtual void set_length(int count) { d_length = (int64_t)count; }
+    virtual void set_length(uint64_t count) { d_length = count; }
 
     virtual bool read_next_instance(bool filter);
 

@@ -119,7 +119,7 @@ Float32::operator=(const Float32 &rhs)
     return *this;
 }
 
-unsigned int
+uint64_t
 Float32::width(bool) const
 {
     return sizeof(dods_float32);
@@ -181,7 +181,7 @@ Float32::deserialize(D4StreamUnMarshaller &um, DMR &)
     um.get_float32( d_buf ) ;
 }
 
-unsigned int
+uint64_t
 Float32::val2buf(void *val, bool)
 {
     // Jose Garcia This method is public I believe it has been
@@ -198,7 +198,7 @@ Float32::val2buf(void *val, bool)
     return width();
 }
 
-unsigned int
+uint64_t
 Float32::buf2val(void **val)
 {
     // Jose Garcia

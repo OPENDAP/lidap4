@@ -48,8 +48,9 @@ namespace libdap {
 
 class TestSequence: public Sequence, public TestCommon {
 private:
-    int d_len;
-    int d_current;
+    uint64_t d_len;
+    bool d_set_length;
+    uint64_t d_current;
     bool d_series_values;
 
     void _duplicate(const TestSequence &ts);
@@ -72,7 +73,7 @@ public:
     void set_series_values(bool);
     bool get_series_values() { return d_series_values; }
 
-    virtual int length() const;
+    virtual uint64_t length() const;
 };
 
 #endif // _testsequence_h

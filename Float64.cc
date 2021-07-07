@@ -118,7 +118,7 @@ Float64::operator=(const Float64 &rhs)
     return *this;
 }
 
-unsigned int
+uint64_t
 Float64::width(bool) const
 {
     return sizeof(dods_float64);
@@ -180,7 +180,7 @@ Float64::deserialize(D4StreamUnMarshaller &um, DMR &)
     um.get_float64( d_buf ) ;
 }
 
-unsigned int
+uint64_t
 Float64::val2buf(void *val, bool)
 {
     // Jose Garcia
@@ -196,7 +196,7 @@ Float64::val2buf(void *val, bool)
     return width();
 }
 
-unsigned int
+uint64_t
 Float64::buf2val(void **val)
 {
     // Jose Garcia

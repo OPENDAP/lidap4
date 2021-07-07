@@ -78,7 +78,7 @@ public:
     virtual ~Int32();
 
     virtual BaseType *ptr_duplicate();
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 
     //DAP2
     virtual bool serialize(ConstraintEvaluator &eval, DDS &dds, Marshaller &m, bool ce_eval = true);
@@ -89,8 +89,8 @@ public:
     virtual void serialize(D4StreamMarshaller &m, DMR &dmr, /*ConstraintEvaluator &eval,*/ bool filter = false);
     virtual void deserialize(D4StreamUnMarshaller &um, DMR &dmr);
 
-    virtual unsigned int val2buf(void *val, bool reuse = false);
-    virtual unsigned int buf2val(void **val);
+    virtual uint64_t val2buf(void *val, bool reuse = false);
+    virtual uint64_t buf2val(void **val);
 
     virtual bool set_value(dods_int32 i);
     virtual dods_int32 value() const;

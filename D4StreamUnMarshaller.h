@@ -82,7 +82,7 @@ private:
 #if USE_XDR_FOR_IEEE754_ENCODING
     void m_deserialize_reals(char *val, int64_t num, int width, Type type);
 #endif
-    void m_twidle_vector_elements(char *vals, int64_t num, int width);
+    void m_twidle_vector_elements(char *vals, uint64_t num, int width);
 
 public:
     D4StreamUnMarshaller(istream &in, bool twiddle_bytes);
@@ -142,18 +142,18 @@ public:
     // read the data; it's the 'varying' get methods that read & return the
     // number of elements. These methods are here to appease the UnMarshaller
     // 'interface' code
-    virtual void get_vector(char **, unsigned int &, Vector &) {
+    virtual void get_vector(char **, uint64_t &, Vector &) {
         throw InternalErr(__FILE__, __LINE__, "Not implemented for DAP4");
     }
 
-    virtual void get_vector(char **, unsigned int &, int, Vector & ) {
+    virtual void get_vector(char **, uint64_t &, int, Vector & ) {
         throw InternalErr(__FILE__, __LINE__, "Not implemented for DAP4");
     }
 
-    virtual void get_vector(char *val, int64_t num_bytes);
-    virtual void get_vector(char *val, int64_t num_elem, int elem_size);
-    virtual void get_vector_float32(char *val, int64_t num_elem);
-    virtual void get_vector_float64(char *val, int64_t num_elem);
+    virtual void get_vector(char *val, uint64_t num_bytes);
+    virtual void get_vector(char *val, uint64_t num_elem, int elem_size);
+    virtual void get_vector_float32(char *val, uint64_t num_elem);
+    virtual void get_vector_float64(char *val, uint64_t num_elem);
 
     virtual void dump(ostream &strm) const;
 };

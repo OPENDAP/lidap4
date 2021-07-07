@@ -155,25 +155,35 @@ void XDRFileMarshaller::put_int(int val)
         throw Error("Network I/O Error(1).");
 }
 
-void XDRFileMarshaller::put_vector(char *val, int num, Vector &)
+void XDRFileMarshaller::put_vector(char *val, uint64_t num, Vector &)
 {
     if (!val) throw InternalErr(__FILE__, __LINE__, "Buffer pointer is not set.");
 
-    put_int(num);
+    // Make sure we only do this for vectors less than DODS_INT_MAX size.
+    if (num > DODS_INT_MAX) {
+        throw InternalErr(__FILE__, __LINE__, "put_vector: num greater than DODS_INT_MAX.");
+    }
+    unsigned int vec_num = static_cast<unsigned int>(num);
+    put_int(vec_num);
 
-    if (!xdr_bytes(_sink, (char **) &val, (unsigned int *) &num, DODS_MAX_ARRAY)) {
+    if (!xdr_bytes(_sink, (char **) &val, (unsigned int *) &vec_num, DODS_MAX_ARRAY)) {
         throw Error("Network I/O Error(2).");
     }
 }
 
-void XDRFileMarshaller::put_vector(char *val, int num, int width, Vector &vec)
+void XDRFileMarshaller::put_vector(char *val, uint64_t num, int width, Vector &vec)
 {
     if (!val) throw InternalErr(__FILE__, __LINE__, "Buffer pointer is not set.");
 
-    put_int(num);
+    // Make sure we only do this for vectors less than DODS_INT_MAX size.
+    if (num > DODS_INT_MAX) {
+        throw InternalErr(__FILE__, __LINE__, "put_vector: num greater than DODS_INT_MAX.");
+    }
+    unsigned int vec_num = static_cast<unsigned int>(num);
+    put_int(vec_num);
 
     BaseType *var = vec.var();
-    if (!xdr_array(_sink, (char **) &val, (unsigned int *) &num, DODS_MAX_ARRAY, width,
+    if (!xdr_array(_sink, (char **) &val, (unsigned int *) &vec_num, DODS_MAX_ARRAY, width,
         XDRUtils::xdr_coder(var->type()))) {
         throw Error("Network I/O Error(2).");
     }

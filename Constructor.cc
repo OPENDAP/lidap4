@@ -245,10 +245,10 @@ Constructor::width()
     @param constrained If true, return the size after applying a constraint.
     @return  The number of bytes used by the variable.
  */
-unsigned int
+uint64_t
 Constructor::width(bool constrained) const
 {
-    unsigned int sz = 0;
+    uint64_t sz = 0;
 
     for (Vars_citer i = d_vars.begin(); i != d_vars.end(); i++) {
         if (constrained) {

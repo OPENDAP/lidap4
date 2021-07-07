@@ -48,12 +48,12 @@ class UnMarshaller;
 
 class Int64: public BaseType
 {
-    virtual unsigned int val2buf(void *val, bool)  {
+    virtual uint64_t val2buf(void *val, bool)  {
     	set_value(*reinterpret_cast<dods_int64*>(val));
     	return sizeof(dods_int64);
     }
     //virtual unsigned int buf2val(void **) { throw InternalErr(__FILE__, __LINE__, "Not implemented for Int64"); }
-    virtual unsigned int buf2val(void **); 
+    virtual uint64_t buf2val(void **);
     virtual void print_val(FILE *, string, bool) { throw InternalErr(__FILE__, __LINE__, "Not implemented for Int64"); }
 
 protected:
@@ -71,7 +71,7 @@ public:
 
     virtual BaseType *ptr_duplicate();
 
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 
     // DAP4
     virtual void compute_checksum(Crc32 &checksum);

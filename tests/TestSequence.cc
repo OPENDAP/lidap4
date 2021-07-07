@@ -64,12 +64,12 @@ TestSequence::ptr_duplicate()
 }
 
 TestSequence::TestSequence(const string &n) :
-        Sequence(n), d_len(4), d_current(0), d_series_values(false)
+        Sequence(n), d_len(4), d_set_length(true), d_current(0), d_series_values(false)
 {
 }
 
 TestSequence::TestSequence(const string &n, const string &d) :
-        Sequence(n, d), d_len(4), d_current(0), d_series_values(false)
+        Sequence(n, d), d_len(4), d_set_length(true), d_current(0), d_series_values(false)
 {
 }
 
@@ -157,7 +157,7 @@ void TestSequence::set_series_values(bool sv)
     d_series_values = sv;
 }
 
-int TestSequence::length() const
+uint64_t TestSequence::length() const
 {
     return 5;
 }

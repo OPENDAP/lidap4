@@ -80,7 +80,8 @@ namespace libdap
 class Vector: public BaseType
 {
 private:
-    int d_length;  		// number of elements in the vector
+    uint64_t d_length;  // number of elements in the vector
+    bool d_length_set;  // sentinel used to reflect whether data has been received.
     BaseType *d_proto;  // element prototype for the Vector
 
     // _buf was a pointer to void; delete[] complained. 6/4/2001 jhrg
@@ -91,7 +92,7 @@ private:
     // the number of elements we have allocated memory to store.
     // This should be either the sizeof(buf)/width(bool constrained = false) for cardinal data
     // or the capacity of d_str for strings or capacity of _vec.
-    unsigned int d_capacity;
+    uint64_t d_capacity;
 
     friend class MarshallerTest;
 
@@ -112,10 +113,10 @@ protected:
     void m_duplicate(const Vector &v);
 
     bool m_is_cardinal_type() const;
-    unsigned int m_create_cardinal_data_buffer_for_type(unsigned int numEltsOfType);
+    uint64_t m_create_cardinal_data_buffer_for_type(uint64_t numEltsOfType);
     void m_delete_cardinal_data_buffer();
 
-    template <class CardType> void m_set_cardinal_values_internal(const CardType* fromArray, int numElts);
+    template <class CardType> void m_set_cardinal_values_internal(const CardType* fromArray, uint64_t numElts);
 
 public:
     Vector(const string &n, BaseType *v, const Type &t, bool is_dap4 = false);
@@ -174,11 +175,11 @@ public:
 
     virtual void set_read_p(bool state);
 
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 
-    virtual int length() const;
+    virtual uint64_t length() const;
 
-    virtual void set_length(int l);
+    virtual void set_length(uint64_t l);
 
     // DAP2
     virtual void intern_data(ConstraintEvaluator &eval, DDS &dds);
@@ -197,21 +198,21 @@ public:
 #endif
     virtual void deserialize(D4StreamUnMarshaller &um, DMR &dmr);
 
-    virtual unsigned int val2buf(void *val, bool reuse = false);
-    virtual unsigned int buf2val(void **val);
+    virtual uint64_t val2buf(void *val, bool reuse = false);
+    virtual uint64_t buf2val(void **val);
 
-    void set_vec(unsigned int i, BaseType *val);
-    void set_vec_nocopy(unsigned int i, BaseType * val);
+    void set_vec(uint64_t i, BaseType *val);
+    void set_vec_nocopy(uint64_t i, BaseType * val);
 
-    void vec_resize(int l);
+    void vec_resize(uint64_t l);
 
     virtual void clear_local_data();
 
-    virtual unsigned int get_value_capacity() const;
-    virtual void reserve_value_capacity(unsigned int numElements);
+    virtual uint64_t get_value_capacity() const;
+    virtual void reserve_value_capacity(uint64_t numElements);
     virtual void reserve_value_capacity();
 
-    virtual unsigned int set_value_slice_from_row_major_vector(const Vector& rowMajorData, unsigned int startElement);
+    virtual uint64_t set_value_slice_from_row_major_vector(const Vector& rowMajorData, uint64_t startElement);
 
 
     virtual bool set_value(dods_byte *val, int sz);

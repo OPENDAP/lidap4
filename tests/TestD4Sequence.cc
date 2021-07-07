@@ -38,6 +38,7 @@ TestD4Sequence::m_duplicate(const TestD4Sequence &ts)
     d_current = ts.d_current;
     d_len = ts.d_len;
     d_series_values = ts.d_series_values;
+    d_set_length = ts.d_set_length;
 }
 
 BaseType *
@@ -46,13 +47,13 @@ TestD4Sequence::ptr_duplicate()
     return new TestD4Sequence(*this);
 }
 
-TestD4Sequence::TestD4Sequence(const string &n) : D4Sequence(n), d_len(4),
+TestD4Sequence::TestD4Sequence(const string &n) : D4Sequence(n), d_len(4), d_set_length(true),
 	d_current(0), d_series_values(false)
 {
 }
 
 TestD4Sequence::TestD4Sequence(const string &n, const string &d)
-    : D4Sequence(n, d), d_len(4), d_current(0), d_series_values(false)
+    : D4Sequence(n, d), d_len(4), d_set_length(true), d_current(0), d_series_values(false)
 {
 }
 

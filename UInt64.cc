@@ -105,7 +105,7 @@ UInt64::operator=(const UInt64 &rhs)
     return *this;
 }
 
-unsigned int
+uint64_t
 UInt64::width(bool) const
 {
     return sizeof(dods_uint64);
@@ -155,7 +155,7 @@ UInt64::set_value(dods_uint64 i)
     return true;
 }
 
-unsigned int
+uint64_t
 UInt64::buf2val(void **val)
 
 {

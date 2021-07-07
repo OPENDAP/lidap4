@@ -172,7 +172,7 @@ public:
      *
      * @return The number of bytes used by a value.
      */
-    virtual unsigned int width(bool /* constrained */ = false) const { return /*sizeof(int64_t);*/ m_type_width();}
+    virtual uint64_t width(bool /* constrained */ = false) const { return /*sizeof(int64_t);*/ static_cast<uint64_t>(m_type_width());}
 
     // DAP4
     virtual void compute_checksum(Crc32 &checksum);
@@ -187,8 +187,8 @@ public:
 
     virtual void dump(ostream &strm) const;
 
-    unsigned int val2buf(void *, bool);
-    unsigned int buf2val(void **);
+    uint64_t val2buf(void *, bool);
+    uint64_t buf2val(void **);
 
     virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table);
 

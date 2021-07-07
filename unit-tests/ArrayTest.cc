@@ -223,9 +223,9 @@ public:
         a1.append_dim(2, "dim_a");
         Array::Dim_iter i = a1.dim_begin();
         CPPUNIT_ASSERT(a1.dimension_size(i) == 2);
-        CPPUNIT_ASSERT_THROW(a1.add_constraint(i, 2, 1, 1), Error);
-        CPPUNIT_ASSERT_THROW(a1.add_constraint(i, 0, 1, 2), Error);
-        CPPUNIT_ASSERT_THROW(a1.add_constraint(i, 0, 3, 1), Error);
+        CPPUNIT_ASSERT_THROW(a1.add_constraint(i, 2, 1, 1, false), Error);
+        CPPUNIT_ASSERT_THROW(a1.add_constraint(i, 0, 1, 2, false), Error);
+        CPPUNIT_ASSERT_THROW(a1.add_constraint(i, 0, 3, 1, false), Error);
     }
 
     void print_test()

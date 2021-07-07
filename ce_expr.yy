@@ -1160,6 +1160,7 @@ void process_array_slices(BaseType *variable, slices *s)
     DBG(cerr << "Before applying projection to array:" << endl);
     DBG(a->print_decl(cerr, "", true, false, true));
 
+    bool setStop;
     Array::Dim_iter r = a->dim_begin();
     slices::iterator p = s->begin();    // p is used after the loop
     for (; p != s->end() && r != a->dim_end(); p++, r++) {
@@ -1174,7 +1175,15 @@ void process_array_slices(BaseType *variable, slices *s)
         int stride = q->v.i;
 
         q++;
-        int stop = q->v.i;
+        uint64_t stop;
+        int ce_stop = q->v.i;
+        if (ce_stop == -1) {
+            setStop = true;
+            stop = 0;
+        } else {
+            setStop = false;
+            stop = ce_stop;
+        }
 
         q++;
         if (q != ds->end()) throw Error(malformed_expr, string("Too many values in index list for one or more variables."));
@@ -1192,10 +1201,10 @@ void process_array_slices(BaseType *variable, slices *s)
         // won't be -1 but the actual ending index of the array. jhrg 12/20/12
 
         if (a->send_p()
-            && (a->dimension_start(r, true) != start || (a->dimension_stop(r, true) != stop && stop != -1) || a->dimension_stride(r, true) != stride))
+            && (a->dimension_start(r, true) != start || a->dimension_stop(r, true) != stop || a->dimension_stride(r, true) != stride))
             throw Error(malformed_expr, string("One or more Array variables were projected multiple times in the constraint expression."));
 
-        a->add_constraint(r, start, stride, stop);
+        a->add_constraint(r, start, stride, stop, setStop);
 
         DBG(cerr << "Set Constraint: " << a->dimension_size(r, true) << endl);
     }
@@ -1242,6 +1251,7 @@ void process_grid_indicial_slices(Grid *g, slices *s)
     slices::iterator p = s->begin();
     Grid::Map_iter r = g->map_begin();
 
+    bool setStop;
     for (; p != s->end() && r != g->map_end(); ++p, ++r) {
         dim_slice *slice = *p;
         //assert(index);
@@ -1254,7 +1264,15 @@ void process_grid_indicial_slices(Grid *g, slices *s)
         int stride = (*q).v.i;
 
         q++;
-        int stop = (*q).v.i;
+        int ce_stop = (*q).v.i;
+        uint64_t stop;
+        if (ce_stop == -1) {
+            setStop = true;
+            stop = 0;
+        } else {
+            setStop = false;
+            stop = ce_stop;
+        }
 
         BaseType *btp = *r;
         assert(btp);
@@ -1271,7 +1289,7 @@ void process_grid_indicial_slices(Grid *g, slices *s)
         DBG(cerr << "process_grid_indices: Setting constraint on " << a->name() << "[" << start << ":" << stop << "]" << endl);
 
         Array::Dim_iter si = a->dim_begin();
-        a->add_constraint(si, start, stride, stop);
+        a->add_constraint(si, start, stride, stop, setStop);
 
     }
 

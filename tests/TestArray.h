@@ -44,7 +44,7 @@ using namespace libdap ;
 class TestArray: public Array, public TestCommon {
     bool d_series_values;
     void _duplicate(const TestArray &ts);
-    unsigned int m_print_array(ostream &out, unsigned int index, unsigned int dims, unsigned int shape[]);
+    uint64_t m_print_array(ostream &out, uint64_t index, unsigned int dims, unsigned int shape[]);
 
     bool m_name_is_special();
     void m_build_special_values();

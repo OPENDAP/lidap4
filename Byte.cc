@@ -121,7 +121,7 @@ Byte & Byte::operator=(const Byte & rhs)
     return *this;
 }
 
-unsigned int Byte::width(bool) const
+uint64_t Byte::width(bool) const
 {
     return sizeof(dods_byte);
 }
@@ -198,7 +198,7 @@ Byte::deserialize(D4StreamUnMarshaller &um, DMR &)
     dynamically allocate storage for the internal buffer.
 
     @return The size (in bytes) of the value's representation.  */
-unsigned int Byte::val2buf(void *val, bool)
+uint64_t Byte::val2buf(void *val, bool)
 {
     // Jose Garcia
     // This method is public therefore and I believe it has being designed
@@ -212,7 +212,7 @@ unsigned int Byte::val2buf(void *val, bool)
     return width();
 }
 
-unsigned int Byte::buf2val(void **val)
+uint64_t Byte::buf2val(void **val)
 {
     // Jose Garcia
     // The same comment justifying throwing an Error in val2buf applies here.

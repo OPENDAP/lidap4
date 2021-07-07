@@ -119,16 +119,16 @@ Str::operator=(const Str &rhs)
     return *this;
 }
 
-int
+uint64_t
 Str::length() const
 {
-    return d_buf.length();
+    return (uint64_t)d_buf.length();
 }
 
-unsigned int
+uint64_t
 Str::width(bool) const
 {
-    return sizeof(string);
+    return (uint64_t)sizeof(string);
 }
 
 bool
@@ -202,7 +202,7 @@ Str::deserialize(D4StreamUnMarshaller &um, DMR &)
     @param val A pointer to null or to a string object.
     @return The sizeof(string*)
     @exception InternalErr Thrown if \e val is null. */
-unsigned int
+uint64_t
 Str::buf2val(void **val)
 {
     // Jose Garcia
@@ -230,7 +230,7 @@ Str::buf2val(void **val)
     @param reuse Not used by this version of the method.
     @exception IntenalErr if \e val is null.
     @return The width of the pointer. */
-unsigned int
+uint64_t
 Str::val2buf(void *val, bool)
 {
     // Jose Garcia

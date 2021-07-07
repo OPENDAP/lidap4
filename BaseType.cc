@@ -1295,7 +1295,7 @@ BaseType::d4_ops(BaseType *, int)
  * @param constrained Should the current constraint be taken into account?
  * @return Bytes of storage
  */
-unsigned int
+uint64_t
 BaseType::width(bool /* constrained */) const
 {
     throw InternalErr(__FILE__, __LINE__, "not implemented");

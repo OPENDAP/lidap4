@@ -410,9 +410,10 @@ Sequence::var_value(size_t row, size_t i)
  @return The base implementation returns -1, indicating that the
  length is not known.  Sub-classes specific to a particular API
  will have a more complete implementation. */
-int Sequence::length() const
+uint64_t Sequence::length() const
 {
-    return -1;
+    return 0;
+    //return -1;
 }
 
 // Hmmm. how is this different from length()?

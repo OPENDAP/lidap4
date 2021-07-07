@@ -71,9 +71,9 @@ public:
     virtual void		get_opaque( char *val, unsigned int len ) ;
     virtual void		get_int( int &val ) ;
 
-    virtual void		get_vector( char **val, unsigned int &num,
+    virtual void		get_vector( char **val, uint64_t &num,
 					    Vector &vec ) ;
-    virtual void		get_vector( char **val, unsigned int &num,
+    virtual void		get_vector( char **val, uint64_t &num,
 					    int width, Vector &vec ) ;
 
     virtual void		dump(ostream &strm) const ;

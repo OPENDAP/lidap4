@@ -204,14 +204,14 @@ public:
      * @todo change the return type to int64_t
      * @return The number of elements; 1 for scalars
      */
-    virtual int length() const { return 1; }
+    virtual uint64_t length() const { return 1; }
 
     /**
      * @brief Set the number of elements for this variable
      * @todo change param type to int64_t
      * @param l The number of elements
      */
-    virtual void set_length(int) { }
+    virtual void set_length(uint64_t) { }
 
     virtual bool is_simple_type() const;
     virtual bool is_vector_type() const;
@@ -291,7 +291,7 @@ public:
     virtual bool ops(BaseType *b, int op);
     virtual bool d4_ops(BaseType *b, int op);
 
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 
     virtual void print_decl(FILE *out, string space = "    ",
                             bool print_semi = true,
@@ -349,7 +349,7 @@ public:
 
 	@return The size (in bytes) of the information copied to <i>val</i>.
     */
-    virtual unsigned int buf2val(void **val) = 0;
+    virtual uint64_t buf2val(void **val) = 0;
 
     /** Store the value pointed to by <i>val</i> in the object's
 	internal buffer. This function does not perform any checks, so
@@ -380,7 +380,7 @@ public:
 	<i>val</i>.
 	@see Grid
 	@see Vector::val2buf */
-    virtual unsigned int val2buf(void *val, bool reuse = false) = 0;
+    virtual uint64_t val2buf(void *val, bool reuse = false) = 0;
 
     /** Similar to using serialize() and deserialize() together in one object.
         Data are read as for serialize and those values are stored in the

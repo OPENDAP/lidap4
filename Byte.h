@@ -73,7 +73,7 @@ public:
 
     Byte &operator=(const Byte &rhs);
 
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 
     virtual BaseType *ptr_duplicate();
 
@@ -86,8 +86,8 @@ public:
     virtual void serialize(D4StreamMarshaller &m, DMR &dmr, bool filter = false);
     virtual void deserialize(D4StreamUnMarshaller &um, DMR &dmr);
 
-    virtual unsigned int val2buf(void *val, bool reuse = false);
-    virtual unsigned int buf2val(void **val);
+    virtual uint64_t val2buf(void *val, bool reuse = false);
+    virtual uint64_t buf2val(void **val);
 
     virtual bool set_value(const dods_byte value);
     virtual dods_byte value() const;

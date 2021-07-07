@@ -98,7 +98,7 @@ D4Opaque::deserialize(D4StreamUnMarshaller &um, DMR &)
     um.get_opaque_dap4( d_buf ) ;
 }
 
-unsigned int
+uint64_t
 D4Opaque::buf2val(void **val)
 {
 	assert(val);
@@ -114,7 +114,7 @@ D4Opaque::buf2val(void **val)
     return sizeof(vector<uint8_t>*);
 }
 
-unsigned int
+uint64_t
 D4Opaque::val2buf(void *val, bool)
 {
     assert(val);

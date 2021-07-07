@@ -129,14 +129,14 @@ string extract_string_argument(BaseType *arg)
     return static_cast<Str*>(arg)->value();
 }
 
-template<class T> static void set_array_using_double_helper(Array *a, double *src, int src_len)
+template<class T> static void set_array_using_double_helper(Array *a, double *src, uint64_t src_len)
 {
     assert(a);
     assert(src);
-    assert(src_len > 0);
+    //assert(src_len > 0);
 
     vector<T> values(src_len);
-    for (int i = 0; i < src_len; ++i)
+    for (uint64_t i = 0; i < src_len; ++i)
         values[i] = (T) src[i];
 
     // This copies the values
@@ -163,11 +163,11 @@ template<class T> static void set_array_using_double_helper(Array *a, double *sr
  @exception Error Thrown if \e dest is not a numeric-type array (Byte, ...,
  Float64) or if the number of elements in \e src does not match the number
  is \e dest. */
-void set_array_using_double(Array *dest, double *src, int src_len)
+void set_array_using_double(Array *dest, double *src, uint64_t src_len)
 {
     assert(dest);
     assert(src);
-    assert(src_len > 0);
+    //assert(src_len > 0);
 
     // Simple types are Byte, ..., Float64, String and Url.
     if ((dest->type() == dods_array_c && !dest->var()->is_simple_type()) || dest->var()->type() == dods_str_c
@@ -236,13 +236,13 @@ template<class T> static double *extract_double_array_helper(Array * a)
 {
     assert(a);
 
-    int length = a->length();
+    uint64_t length = a->length();
 
     vector<T> b(length);
     a->value(&b[0]);    // Extract the values of 'a' to 'b'
 
     double *dest = new double[length];
-    for (int i = 0; i < length; ++i)
+    for (uint64_t i = 0; i < length; ++i)
         dest[i] = (double) b[i];
 
     return dest;
@@ -315,14 +315,14 @@ double *extract_double_array(Array * a)
 template<class T> static void extract_double_array_helper(Array * a, vector<double> &dest)
 {
     assert(a);
-    assert(dest.size() == (unsigned long )a->length());
+    assert(dest.size() == a->length());
 
-    int length = a->length();
+    uint64_t length = a->length();
 
     vector<T> b(length);
     a->value(&b[0]);    // Extract the values of 'a' to 'b'
 
-    for (int i = 0; i < length; ++i)
+    for (uint64_t i = 0; i < length; ++i)
         dest[i] = (double) b[i];
 }
 

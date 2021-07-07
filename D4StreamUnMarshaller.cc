@@ -297,7 +297,7 @@ D4StreamUnMarshaller::get_opaque_dap4( vector<uint8_t> &val )
 }
 
 void
-D4StreamUnMarshaller::get_vector( char *val, int64_t bytes )
+D4StreamUnMarshaller::get_vector( char *val, uint64_t bytes )
 {
     d_in.read(val, bytes);
 }
@@ -328,7 +328,7 @@ void D4StreamUnMarshaller::m_deserialize_reals(char *val, int64_t num, int width
 }
 #endif
 
-void D4StreamUnMarshaller::m_twidle_vector_elements(char *vals, int64_t num, int width)
+void D4StreamUnMarshaller::m_twidle_vector_elements(char *vals, uint64_t num, int width)
 {
     switch (width) {
         case 2: {
@@ -361,15 +361,15 @@ void D4StreamUnMarshaller::m_twidle_vector_elements(char *vals, int64_t num, int
 }
 
 void
-D4StreamUnMarshaller::get_vector(char *val, int64_t num_elem, int elem_size)
+D4StreamUnMarshaller::get_vector(char *val, uint64_t num_elem, int elem_size)
 {
 	assert(std::numeric_limits<float>::is_iec559);
 	assert(std::numeric_limits<double>::is_iec559);
 	assert(val);
-	assert(num_elem >= 0);
+	//assert(num_elem >= 0);
 	assert(elem_size > 0);
 
-	int64_t bytes;
+	uint64_t bytes;
 
 	switch (elem_size) {
 	case 1:
@@ -401,15 +401,15 @@ D4StreamUnMarshaller::get_vector(char *val, int64_t num_elem, int elem_size)
 }
 
 void
-D4StreamUnMarshaller::get_vector_float32(char *val, int64_t num_elem)
+D4StreamUnMarshaller::get_vector_float32(char *val, uint64_t num_elem)
 {
 #if !USE_XDR_FOR_IEEE754_ENCODING
 	assert(std::numeric_limits<float>::is_iec559);
 	assert(val);
-	assert(num_elem >= 0);
+	//assert(num_elem >= 0);
 	assert(!(num_elem & 0x6000000000000000)); // 0x 60 00 --> 0110 0000
 
-	int64_t bytes = num_elem << 2;
+	uint64_t bytes = num_elem << 2;
 
     d_in.read(val, bytes);
 
@@ -433,15 +433,15 @@ D4StreamUnMarshaller::get_vector_float32(char *val, int64_t num_elem)
 }
 
 void
-D4StreamUnMarshaller::get_vector_float64(char *val, int64_t num_elem)
+D4StreamUnMarshaller::get_vector_float64(char *val, uint64_t num_elem)
 {
 #if !USE_XDR_FOR_IEEE754_ENCODING
 	assert(std::numeric_limits<float>::is_iec559);
 	assert(val);
-	assert(num_elem >= 0);
+	//assert(num_elem >= 0);
 	assert(!(num_elem & 0x7000000000000000)); // 0x 70 00 --> 0111 0000
 
-	int64_t bytes = num_elem << 3;
+	uint64_t bytes = num_elem << 3;
 
     d_in.read(val, bytes);
 

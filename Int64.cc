@@ -131,7 +131,7 @@ Int64::operator=(const Int64 &rhs)
     return *this;
 }
 
-unsigned int
+uint64_t
 Int64::width(bool) const
 {
     return sizeof(dods_int64);
@@ -181,7 +181,7 @@ Int64::set_value(dods_int64 i)
     return true;
 }
 
-unsigned int
+uint64_t
 Int64::buf2val(void **val)
 {
     if (!val)
@@ -194,6 +194,7 @@ Int64::buf2val(void **val)
 
     return width();
 }
+
 void Int64::print_val(ostream &out, string space, bool print_decl_p)
 {
     if (print_decl_p) {

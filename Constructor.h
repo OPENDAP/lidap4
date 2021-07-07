@@ -74,7 +74,7 @@ public:
     virtual void set_send_p(bool state);
     virtual void set_read_p(bool state);
 
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 #if 0
     virtual unsigned int width(bool constrained);
 #endif
@@ -112,10 +112,10 @@ public:
     virtual void deserialize(D4StreamUnMarshaller &um, DMR &dmr);
 
     // Do not store values in memory as for C; users work with the C++ objects
-    virtual unsigned int val2buf(void *, bool) {
+    virtual uint64_t val2buf(void *, bool) {
         throw InternalErr(__FILE__, __LINE__, "Never use this method; see the programmer's guide documentation.");
     }
-    virtual unsigned int buf2val(void **) {
+    virtual uint64_t buf2val(void **) {
         throw InternalErr(__FILE__, __LINE__, "Never use this method; see the programmer's guide documentation.");
     }
 

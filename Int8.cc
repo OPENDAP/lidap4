@@ -107,7 +107,7 @@ Int8::operator=(const Int8 &rhs)
     return *this;
 }
 
-unsigned int
+uint64_t
 Int8::width(bool) const
 {
     return sizeof(dods_int8);

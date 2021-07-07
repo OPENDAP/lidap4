@@ -169,18 +169,22 @@ XDRFileUnMarshaller::get_int( int &val )
 }
 
 void
-XDRFileUnMarshaller::get_vector( char **val, unsigned int &num, Vector & )
+XDRFileUnMarshaller::get_vector( char **val, uint64_t &num, Vector & )
 {
-    if( !xdr_bytes( _source, val, &num, DODS_MAX_ARRAY) )
+    auto vec_num = static_cast<unsigned int>(num);
+
+    if( !xdr_bytes( _source, val, &vec_num, DODS_MAX_ARRAY) )
 	throw Error("Network I/O error (1).");
 }
 
 void
-XDRFileUnMarshaller::get_vector( char **val, unsigned int &num, int width, Vector &vec )
+XDRFileUnMarshaller::get_vector( char **val, uint64_t &num, int width, Vector &vec )
 {
     BaseType *var = vec.var() ;
 
-    if( !xdr_array( _source, val, &num, DODS_MAX_ARRAY, width,
+    auto vec_num = static_cast<unsigned int>(num);
+
+    if( !xdr_array( _source, val, &vec_num, DODS_MAX_ARRAY, width,
 		    XDRUtils::xdr_coder( var->type() ) ) )
     {
 	throw Error("Network I/O error (2).");

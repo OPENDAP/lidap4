@@ -241,7 +241,7 @@ public:
 
     virtual bool is_linear();
 
-    virtual int length() const;
+    virtual uint64_t length() const;
 
     virtual int number_of_rows() const;
 

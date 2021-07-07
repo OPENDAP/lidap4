@@ -53,6 +53,7 @@
 #include "Vector.h"
 #include "XDRUtils.h"
 #include "util.h"
+#include "dods-limits.h"
 
 #include "debug.h"
 #include "DapIndent.h"
@@ -343,7 +344,7 @@ void XDRStreamMarshaller::put_int(int val)
     d_out.write(d_buf, bytes_written);
 }
 
-void XDRStreamMarshaller::put_vector(char *val, int num, int width, Vector &vec)
+void XDRStreamMarshaller::put_vector(char *val, uint64_t num, int width, Vector &vec)
 {
     put_vector(val, num, width, vec.var()->type());
 }
@@ -356,10 +357,16 @@ void XDRStreamMarshaller::put_vector(char *val, int num, int width, Vector &vec)
  * @see put_vector_part()
  * @see put_vector_end()
  */
-void XDRStreamMarshaller::put_vector_start(int num)
+void XDRStreamMarshaller::put_vector_start(uint64_t num)
 {
-    put_int(num);
-    put_int(num);
+    // Make sure we only do this for vectors less than DODS_INT_MAX size.
+    if (num > DODS_INT_MAX) {
+        throw InternalErr(__FILE__, __LINE__, "put_vector: num greater than DODS_INT_MAX.");
+    }
+    auto vec_num = static_cast<int>(num);
+
+    put_int(vec_num);
+    put_int(vec_num);
 
     d_partial_put_byte_count = 0;
 }
@@ -392,25 +399,30 @@ void XDRStreamMarshaller::put_vector_end()
 }
 
 // Start of parallel I/O support. jhrg 8/19/15
-void XDRStreamMarshaller::put_vector(char *val, int num, Vector &)
+void XDRStreamMarshaller::put_vector(char *val, uint64_t num, Vector &)
 {
     if (!val) throw InternalErr(__FILE__, __LINE__, "Could not send byte vector data. Buffer pointer is not set.");
 
+    // Make sure we only do this for vectors less than DODS_INT_MAX size.
+    if (num > DODS_INT_MAX) {
+        throw InternalErr(__FILE__, __LINE__, "put_vector: num greater than DODS_INT_MAX.");
+    }
+    unsigned int vec_num = static_cast<unsigned int>(num);
     // write the number of members of the array being written and then set the position to 0
-    put_int(num);
+    put_int(vec_num);
 
     // this is the word boundary for writing xdr bytes in a vector.
     const unsigned int add_to = 8;
     // switch to memory on the heap since the thread will need to access it
     // after this code returns.
-    char *byte_buf = new char[num + add_to];
+    char *byte_buf = new char[vec_num + add_to];
     XDR byte_sink;
     try {
-        xdrmem_create(&byte_sink, byte_buf, num + add_to, XDR_ENCODE);
+        xdrmem_create(&byte_sink, byte_buf, vec_num + add_to, XDR_ENCODE);
         if (!xdr_setpos(&byte_sink, 0))
             throw Error("Network I/O Error. Could not send byte vector data - unable to set stream position.");
 
-        if (!xdr_bytes(&byte_sink, (char **) &val, (unsigned int *) &num, num + add_to))
+        if (!xdr_bytes(&byte_sink, (char **) &val, (unsigned int *) &vec_num, vec_num + add_to))
             throw Error("Network I/O Error(2). Could not send byte vector data - unable to encode data.");
 
         unsigned int bytes_written = xdr_getpos(&byte_sink);
@@ -448,12 +460,17 @@ void XDRStreamMarshaller::put_vector(char *val, int num, Vector &)
  * @param width The number of bytes in each element
  * @param type The DAP type of the elements
  */
-void XDRStreamMarshaller::put_vector(char *val, unsigned int num, int width, Type type)
+void XDRStreamMarshaller::put_vector(char *val, uint64_t num, int width, Type type)
 {
     assert(val || num == 0);
 
+    // Make sure we only do this for vectors less than DODS_INT_MAX size.
+    if (num > DODS_INT_MAX) {
+        throw InternalErr(__FILE__, __LINE__, "put_vector: num greater than DODS_INT_MAX.");
+    }
+    unsigned int vec_num = static_cast<unsigned int>(num);
     // write the number of array members being written, then set the position back to 0
-    put_int(num);
+    put_int(vec_num);
 
     if (num == 0)
         return;
@@ -463,7 +480,7 @@ void XDRStreamMarshaller::put_vector(char *val, unsigned int num, int width, Typ
 
     // the size is the number of elements num times the width of each
     // element, then add 4 bytes for the number of elements
-    int size = (num * use_width) + 4;
+    int size = (vec_num * use_width) + 4;
 
     // allocate enough memory for the elements
     //vector<char> vec_buf(size);
@@ -477,7 +494,7 @@ void XDRStreamMarshaller::put_vector(char *val, unsigned int num, int width, Typ
             throw Error("Network I/O Error. Could not send vector data - unable to set stream position.");
 
         // write the array to the buffer
-        if (!xdr_array(&vec_sink, (char **) &val, (unsigned int *) &num, size, width, XDRUtils::xdr_coder(type)))
+        if (!xdr_array(&vec_sink, (char **) &val, (unsigned int *) &vec_num, size, width, XDRUtils::xdr_coder(type)))
             throw Error("Network I/O Error(2). Could not send vector data - unable to encode.");
 
         // how much was written to the buffer
@@ -514,13 +531,19 @@ void XDRStreamMarshaller::put_vector(char *val, unsigned int num, int width, Typ
  * @see put_vector_start()
  * @see put_vector_end()
  */
-void XDRStreamMarshaller::put_vector_part(char *val, unsigned int num, int width, Type type)
+void XDRStreamMarshaller::put_vector_part(char *val, uint64_t num, int width, Type type)
 {
+    // Make sure we only do this for vectors less than DODS_INT_MAX size.
+    if (num > DODS_INT_MAX) {
+        throw InternalErr(__FILE__, __LINE__, "put_vector: num greater than DODS_INT_MAX.");
+    }
+    unsigned int vec_num = static_cast<unsigned int>(num);
+
     if (width == 1) {
         // Add space for the 4 bytes of length info and 4 bytes for padding, even though
         // we will not send either of those.
         const unsigned int add_to = 8;
-        unsigned int bufsiz = num + add_to;
+        unsigned int bufsiz = vec_num + add_to;
         //vector<char> byte_buf(bufsiz);
         char *byte_buf = new char[bufsiz];
         XDR byte_sink;
@@ -529,7 +552,7 @@ void XDRStreamMarshaller::put_vector_part(char *val, unsigned int num, int width
             if (!xdr_setpos(&byte_sink, 0))
                 throw Error("Network I/O Error. Could not send byte vector data - unable to set stream position.");
 
-            if (!xdr_bytes(&byte_sink, (char **) &val, (unsigned int *) &num, bufsiz))
+            if (!xdr_bytes(&byte_sink, (char **) &val, (unsigned int *) &vec_num, bufsiz))
                 throw Error("Network I/O Error(2). Could not send byte vector data - unable to encode data.");
 
 #ifdef USE_POSIX_THREADS
@@ -537,9 +560,9 @@ void XDRStreamMarshaller::put_vector_part(char *val, unsigned int num, int width
             tm->increment_child_thread_count();
 
             // Increment the element count so we can figure out about the padding in put_vector_last()
-            d_partial_put_byte_count += num;
+            d_partial_put_byte_count += vec_num;
 
-            tm->start_thread(MarshallerThread::write_thread_part, d_out, byte_buf, num);
+            tm->start_thread(MarshallerThread::write_thread_part, d_out, byte_buf, vec_num);
             xdr_destroy(&byte_sink);
 #else
             // Only send the num bytes that follow the 4 bytes of length info - we skip the
@@ -568,7 +591,7 @@ void XDRStreamMarshaller::put_vector_part(char *val, unsigned int num, int width
 
         // the size is the number of elements num times the width of each
         // element, then add 4 bytes for the (int) number of elements
-        int size = (num * use_width) + 4;
+        int size = (vec_num * use_width) + 4;
 
         // allocate enough memory for the elements
         //vector<char> vec_buf(size);
@@ -582,7 +605,7 @@ void XDRStreamMarshaller::put_vector_part(char *val, unsigned int num, int width
                 throw Error("Network I/O Error. Could not send vector data - unable to set stream position.");
 
             // write the array to the buffer
-            if (!xdr_array(&vec_sink, (char **) &val, (unsigned int *) &num, size, width, XDRUtils::xdr_coder(type)))
+            if (!xdr_array(&vec_sink, (char **) &val, (unsigned int *) &vec_num, size, width, XDRUtils::xdr_coder(type)))
                 throw Error("Network I/O Error(2). Could not send vector data -unable to encode data.");
 
 #ifdef USE_POSIX_THREADS

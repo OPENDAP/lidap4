@@ -133,15 +133,15 @@ public:
         throw InternalErr(__FILE__, __LINE__, "Not Implemented; use put_length_prefix.");
     }
 
-    virtual void put_vector(char *val, int64_t num_bytes);
-    virtual void put_vector(char *val, int64_t num_elem, int elem_size);
-    virtual void put_vector_float32(char *val, int64_t num_elem);
-    virtual void put_vector_float64(char *val, int64_t num_elem);
+    virtual void put_vector(char *val, uint64_t num_bytes);
+    virtual void put_vector(char *val, uint64_t num_elem, int elem_size);
+    virtual void put_vector_float32(char *val, uint64_t num_elem);
+    virtual void put_vector_float64(char *val, uint64_t num_elem);
 
-    virtual void put_vector(char *, int , Vector &) {
+    virtual void put_vector(char *, uint64_t , Vector &) {
         throw InternalErr(__FILE__, __LINE__, "Not Implemented; use other put_vector() versions.");
     }
-    virtual void put_vector(char *, int , int , Vector &) {
+    virtual void put_vector(char *, uint64_t , int , Vector &) {
         throw InternalErr(__FILE__, __LINE__, "Not Implemented; use other put_vector() versions.");
     }
 
@@ -154,10 +154,10 @@ public:
      * @see put_vector_part()
      * @see put_vector_end()
      */
-    virtual void put_vector_start(int /*num*/) {
+    virtual void put_vector_start(uint64_t /*num*/) {
     }
 
-    virtual void put_vector_part(char */*val*/, unsigned int /*num*/, int /*width*/, Type /*type*/);
+    virtual void put_vector_part(char */*val*/, uint64_t /*num*/, int /*width*/, Type /*type*/);
 
     /**
      * Close a vector when its values are written using put_vector_part().

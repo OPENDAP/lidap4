@@ -492,7 +492,7 @@ D4Enum::deserialize(D4StreamUnMarshaller &um, DMR &)
 	}
 }
 
-unsigned int D4Enum::val2buf(void *val, bool)
+uint64_t D4Enum::val2buf(void *val, bool)
 {
     if (!val)
         throw InternalErr("The incoming pointer does not contain any data.");
@@ -531,7 +531,7 @@ unsigned int D4Enum::val2buf(void *val, bool)
     return width();
 }
 
-unsigned int D4Enum::buf2val(void **val)
+uint64_t D4Enum::buf2val(void **val)
 {
     if (!val)
         throw InternalErr("NULL pointer");

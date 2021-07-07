@@ -543,10 +543,10 @@ void D4StreamMarshaller::put_opaque_dap4(const char *val, int64_t len)
  * @param val Pointer to the data
  * @param num Number of bytes to write
  */
-void D4StreamMarshaller::put_vector(char *val, int64_t num_bytes)
+void D4StreamMarshaller::put_vector(char *val, uint64_t num_bytes)
 {
     assert(val);
-    assert(num_bytes >= 0);
+    //assert(num_bytes >= 0);
 
     checksum_update(val, num_bytes);
 
@@ -565,10 +565,10 @@ void D4StreamMarshaller::put_vector(char *val, int64_t num_bytes)
     }
 }
 
-void D4StreamMarshaller::put_vector(char *val, int64_t num_elem, int elem_size)
+void D4StreamMarshaller::put_vector(char *val, uint64_t num_elem, int elem_size)
 {
 	assert(val);
-	assert(num_elem >= 0);
+	//assert(num_elem >= 0);
 	assert(elem_size > 0);
 
 	int64_t bytes;
@@ -622,13 +622,13 @@ void D4StreamMarshaller::put_vector(char *val, int64_t num_elem, int elem_size)
  * @param width Size of a single element
  * @param type DAP variable type; used to handle float32 and float64 types correctly
  */
-void D4StreamMarshaller::put_vector_float32(char *val, int64_t num_elem)
+void D4StreamMarshaller::put_vector_float32(char *val, uint64_t num_elem)
 {
 #if !USE_XDR_FOR_IEEE754_ENCODING
 
 	assert(std::numeric_limits<float>::is_iec559);
 	assert(val);
-	assert(num_elem >= 0);
+	//assert(num_elem >= 0);
 	// sizeof() a 32-bit float is 4, so we're going to send 4 * num_elem bytes, so
 	// make sure that doesn't overflow a 63-bit integer (the max positive value in
 	// a signed int64; use 1110 0000 0.. (0xe000 ...) to mask for non-zero bits
@@ -696,13 +696,13 @@ void D4StreamMarshaller::put_vector_float32(char *val, int64_t num_elem)
  * @param width Size of a single element
  * @param type DAP variable type; used to handle float32 and float64 types correctly
  */
-void D4StreamMarshaller::put_vector_float64(char *val, int64_t num_elem)
+void D4StreamMarshaller::put_vector_float64(char *val, uint64_t num_elem)
 {
 #if !USE_XDR_FOR_IEEE754_ENCODING
 
 	assert(std::numeric_limits<double>::is_iec559);
 	assert(val);
-	assert(num_elem >= 0);
+	//assert(num_elem >= 0);
 	// See comment above
 	assert(!(num_elem & 0xf000000000000000));
 
@@ -759,10 +759,10 @@ void D4StreamMarshaller::put_vector_float64(char *val, int64_t num_elem)
 
 }
 
-void D4StreamMarshaller::put_vector_part(char *val, unsigned int num, int width, Type type)
+void D4StreamMarshaller::put_vector_part(char *val, uint64_t num, int width, Type type)
 {
     assert(val);
-    assert(num >= 0);
+    //assert(num >= 0);
     assert(width > 0);
 
     switch(type) {

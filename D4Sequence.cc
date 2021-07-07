@@ -134,7 +134,7 @@ void D4Sequence::m_duplicate(const D4Sequence &s)
 
  @brief The Sequence constructor. */
 D4Sequence::D4Sequence(const string &n) :
-        Constructor(n, dods_sequence_c, true /* is dap4 */), d_clauses(0), d_copy_clauses(true), d_length(0)
+        Constructor(n, dods_sequence_c, true /* is dap4 */), d_clauses(0), d_copy_clauses(true), d_length(0), d_set_length(false)
 {
 }
 
@@ -149,7 +149,7 @@ D4Sequence::D4Sequence(const string &n) :
 
  @brief The Sequence server-side constructor. */
 D4Sequence::D4Sequence(const string &n, const string &d) :
-        Constructor(n, d, dods_sequence_c, true /* is dap4 */), d_clauses(0), d_copy_clauses(true), d_length(0)
+        Constructor(n, d, dods_sequence_c, true /* is dap4 */), d_clauses(0), d_copy_clauses(true), d_length(0), d_set_length(false)
 {
 }
 
@@ -394,7 +394,7 @@ void D4Sequence::deserialize(D4StreamUnMarshaller &um, DMR &dmr)
 
     set_length(um_count);
 
-    for (int64_t i = 0; i < d_length; ++i) {
+    for (uint64_t i = 0; i < d_length; ++i) {
         D4SeqRow *row = new D4SeqRow;
         for (Vars_iter i = d_vars.begin(), e = d_vars.end(); i != e; ++i) {
             (*i)->deserialize(um, dmr);

@@ -42,11 +42,11 @@ namespace libdap
 class Int8: public BaseType
 {
 	// This is used in BaseType *Vector::var(unsigned int i)
-	virtual unsigned int val2buf(void *val, bool)  {
+	virtual uint64_t val2buf(void *val, bool)  {
     	set_value(*reinterpret_cast<dods_int8*>(val));
     	return sizeof(dods_int8);
     }
-    virtual unsigned int buf2val(void **) { throw InternalErr(__FILE__, __LINE__, "buf2val: Not implemented for Int8"); }
+    virtual uint64_t buf2val(void **) { throw InternalErr(__FILE__, __LINE__, "buf2val: Not implemented for Int8"); }
     virtual void print_val(FILE *, string , bool) { throw InternalErr(__FILE__, __LINE__, "print_val: Not implemented for Int8"); }
 
 protected:
@@ -64,7 +64,7 @@ public:
 
     virtual BaseType *ptr_duplicate();
 
-    virtual unsigned int width(bool constrained = false) const;
+    virtual uint64_t width(bool constrained = false) const;
 
     // DAP4
     virtual void compute_checksum(Crc32 &checksum);
