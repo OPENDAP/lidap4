@@ -161,7 +161,7 @@ public:
 
             CPPUNIT_ASSERT(result_dmr == baseline_dmr);
 
-            DDS *dds = dmr->getDDS();
+            DDS *dds = dmr->getDDS(true);
             std::ostringstream result_dds;
             dds->print(result_dds);
 

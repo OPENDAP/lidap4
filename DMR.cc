@@ -370,8 +370,8 @@ DDS *DMR::getDDS(DMR &dmr)
  *
  * @return A pointer to the newly allocated DDS.
  */
-DDS *
-DMR::getDDS()
+    DDS *
+DMR::getDDS(bool show_shared_dims)
 {
 #if 0
     return DMR::getDDS(*this);
@@ -383,11 +383,22 @@ DMR::getDDS()
 #endif
     BaseTypeFactory btf;
     DDS *dds = new DDS(&btf, name());
+
+    // Rename DDS container if there is a group with explicit container's name
+    string cname = "";
+    for (D4Group::groupsIter i = root()->grp_begin(), e = root()->grp_end(); i != e; ++i) {
+        size_t pos = (*i)->name().find("_excon");
+        if (pos != string::npos) {
+            cname = (*i)->name().substr(0,pos);
+        }
+    }
+    if(!cname.empty()) dds->container_name(cname);
+
     dds->filename(filename());
 
     // Now copy the global attributes
     // TODO Make this a unique_ptr<> and let the compiler delete it. jhrg 6/17/19
-    vector<BaseType *> *top_vars = root()->transform_to_dap2(&(dds->get_attr_table())/*, true*/);
+    vector<BaseType *> *top_vars = root()->transform_to_dap2(&(dds->get_attr_table())/*, true*/, show_shared_dims);
     for (vector<BaseType *>::iterator i = top_vars->begin(), e = top_vars->end(); i != e; i++) {
         dds->add_var_nocopy(*i);
     }

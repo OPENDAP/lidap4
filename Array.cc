@@ -298,8 +298,8 @@ bool Array::is_dap2_grid()
  * returned vector may contain a DAP2 Array or a Grid. Or, if the Array' prototype is
  * a type that cannot be represented in DAP2 the return will be NULL.
  */
-std::vector<BaseType *> *
-Array::transform_to_dap2(AttrTable *)
+    std::vector<BaseType *> *
+Array::transform_to_dap2(AttrTable *, bool show_shared_dims)
 {
     DBG(cerr << __func__ << "() - BEGIN Array '"<< name() << "'" << endl);;
 
@@ -330,7 +330,7 @@ Array::transform_to_dap2(AttrTable *)
             for (; miter != end; miter++) {
                 D4Map *d4_map = (*miter);
                 Array *d4_map_array = const_cast<Array*>(d4_map->array());
-                vector<BaseType *> *d2_result = d4_map_array->transform_to_dap2(&(g->get_attr_table()));
+                vector<BaseType *> *d2_result = d4_map_array->transform_to_dap2(&(g->get_attr_table()), show_shared_dims);
                 if (d2_result) {
                     if (d2_result->size() > 1)
                         throw Error(internal_error, "D4Map Array conversion resulted in multiple DAP2 objects.");

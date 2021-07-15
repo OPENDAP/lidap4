@@ -176,8 +176,8 @@ Structure::transform_to_dap4(D4Group *root, Constructor *container)
  *
  * @return A pointer to the transformed variable
  */
-vector<BaseType *> *
-Structure::transform_to_dap2(AttrTable *)
+    std::vector<BaseType *> *
+Structure::transform_to_dap2(AttrTable *, bool show_shared_dims)
 {
     DBG(cerr << " " << __func__ << " BEGIN" << endl);
     Structure *dest = new Structure(name());
@@ -196,7 +196,7 @@ Structure::transform_to_dap2(AttrTable *)
 
     vector<BaseType *> dropped_vars;
     for (Structure::Vars_citer i = var_begin(), e = var_end(); i != e; ++i) {
-        vector<BaseType *> *new_vars = (*i)->transform_to_dap2(&dest->get_attr_table() /*attrs*/);
+        vector<BaseType *> *new_vars = (*i)->transform_to_dap2(&dest->get_attr_table() /*attrs*/, show_shared_dims);
         if (new_vars) {  // Might be un-mappable
             // It's not so game on..
 #if 0

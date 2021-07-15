@@ -586,7 +586,7 @@ public:
 
             parser.intern(ifs, &dmr);
 
-            auto_ptr<DDS> dds(dmr.getDDS());
+            auto_ptr<DDS> dds(dmr.getDDS(false));
             auto_ptr<DAS> das(dds->get_das());
 
             string baseline = read_test_baseline(string(TEST_SRC_DIR) + "/dmr-testsuite/coads_climatology.nc.full.dmr.das");
@@ -667,7 +667,7 @@ public:
 
             parser.intern(ifs, &dmr);
 
-            auto_ptr<DDS> dds(dmr.getDDS());
+            auto_ptr<DDS> dds(dmr.getDDS(false));
             auto_ptr<DAS> das(dds->get_das());
 
             string baseline = read_test_baseline(string(TEST_SRC_DIR) +  "/dmr-to-dap2-testsuite/1A.GPM.GMI.COUNT2014v3.20160105.h5.dmrpp.dmr.baseline");
@@ -695,7 +695,7 @@ public:
 
             parser.intern(ifs, &dmr);
 
-            auto_ptr<DDS> dds(dmr.getDDS());
+            auto_ptr<DDS> dds(dmr.getDDS(false));
             auto_ptr<DAS> das(dds->get_das());
 
             string baseline = read_test_baseline(string(TEST_SRC_DIR) +  "/dmr-to-dap2-testsuite/hacked.dmrpp.dmr.baseline");

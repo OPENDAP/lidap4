@@ -228,10 +228,10 @@ bool Int8::d4_ops(BaseType *b, int op)
  *
  * @return A pointer to the transformed variable
  */
-std::vector<BaseType *> *
-Int8::transform_to_dap2(AttrTable *parent_attr_table)
+    std::vector<BaseType *> *
+Int8::transform_to_dap2(AttrTable *parent_attr_table, bool show_shared_dims)
 {
-    vector<BaseType *> *vec = BaseType::transform_to_dap2(parent_attr_table);
+    vector<BaseType *> *vec = BaseType::transform_to_dap2(parent_attr_table, show_shared_dims);
     if(vec->size()!=1){
         ostringstream oss;
         oss << __func__ << "() -  Something Bad Happened. This transform should produce only ";

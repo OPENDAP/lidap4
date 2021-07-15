@@ -190,7 +190,7 @@ public:
     unsigned int val2buf(void *, bool);
     unsigned int buf2val(void **);
 
-    virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table);
+    virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table, bool show_shared_dims);
 
 };
 

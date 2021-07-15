@@ -98,7 +98,7 @@ public:
         throw InternalErr(__FILE__, __LINE__, "Unimplemented method");
     }
 
-    virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table);
+    virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table, bool show_shared_dims);
 
     virtual void dump(std::ostream &strm) const ;
 

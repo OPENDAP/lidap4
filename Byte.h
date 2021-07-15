@@ -97,7 +97,7 @@ public:
 
     virtual bool ops(BaseType *b, int op);
     virtual bool d4_ops(BaseType *b, int op);
-    virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table);
+    virtual std::vector<BaseType *> *transform_to_dap2(AttrTable *parent_attr_table, bool show_shared_dims = false);
 
     virtual void dump(ostream &strm) const ;
 };
